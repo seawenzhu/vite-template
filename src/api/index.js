@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {ElMessage} from 'element-plus'
-import store from '@/stores'
-import router from "@/routers";
+import store from '@/store'
+import router from "@/router";
 import CacheKey from "@/utils/keys.js";
 import Cookies from "js-cookie";
 // 请求列表(防重复提交)

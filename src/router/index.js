@@ -1,13 +1,24 @@
 import {createRouter, createWebHistory} from "vue-router";
 import NProgress from "@/plugins/nprogress";
-import { errorRouter, commonRouter} from "./modules/common-router";
+import {errorRouter, commonRouter, authRouter} from "./modules/common-router";
 import {ElNotification} from "element-plus";
 
 const router = createRouter({
     history: createWebHistory(),
-    routes: [...commonRouter, ...errorRouter],
+    // base: '/',
+    routes: [
+        {
+            path: "/",
+            component: () => import("@/layouts/index.vue"),
+            redirect: "/home",
+            children: [
+                ...authRouter,
+            ]
+        },
+        ...commonRouter,
+        ...errorRouter],
     strict: false,
-    scrollBehavior: () => ({ left: 0, top: 0 })
+    scrollBehavior: () => ({left: 0, top: 0})
 });
 
 
@@ -51,7 +62,7 @@ router.afterEach(() => {
  * */
 router.onError(error => {
     NProgress.done();
-    ElNotification.error({ title: "路由错误", message: error.message });
+    ElNotification.error({title: "路由错误", message: error.message});
 });
 
 export default router;

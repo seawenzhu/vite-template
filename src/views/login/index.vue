@@ -6,7 +6,8 @@ import { User, Lock, Key, Picture, Loading } from "@element-plus/icons-vue"
 import { useFocus } from "@/hooks/useFocus"
 import ApiAuth from '@/api/auth'
 const { isFocus, handleBlur, handleFocus } = useFocus()
-import { useUserStore } from "@/stores/modules/user"
+import { useUserStore } from "@/store/modules/user"
+const router = useRouter()
 /** 登录表单元素的引用 */
 const loginFormRef = ref(null)
 

@@ -1,0 +1,91 @@
+@import "tailwind.css";
+@import "el-vars.css";/** 全局 CSS 变量，这种变量不仅可以在 CSS 和 SCSS 中使用，还可以导入到 JS 中使用 */
+
+:root {
+  /** Body */
+  --body-text-color: var(--el-text-color-primary);
+  --body-bg-color: var(--el-bg-color-page);
+  /** Header 区域 = NavigationBar 组件 + TagsView 组件 */
+  --header-height: calc(
+          var(--navigationbar-height) + var(--tagsview-height) + var(--header-border-bottom-width)
+  );
+  --header-bg-color: var(--el-bg-color);
+  --header-box-shadow: var(--el-box-shadow-lighter);
+  --header-border-bottom-width: 1px;
+  --header-border-bottom: var(--header-border-bottom-width) solid var(--el-fill-color);
+  /** NavigationBar 组件 */
+  --navigationbar-height: 50px;
+  --navigationbar-text-color: var(--el-text-color-regular);
+  /** Sidebar 组件（左侧模式全部生效、顶部模式全部不生效、混合模式非颜色部分生效） */
+  --sidebar-width: 220px;
+  --sidebar-hide-width: 58px;
+  --sidebar-border-right: 1px solid var(--el-fill-color);
+  --sidebar-menu-item-height: 60px;
+  --sidebar-menu-tip-line-bg-color: var(--el-color-primary);
+  --sidebar-menu-bg-color: #001428;
+  --sidebar-menu-hover-bg-color: #409eff10;
+  --sidebar-menu-text-color: #cfd3dc;
+  --sidebar-menu-active-text-color: #ffffff;
+  /** TagsView 组件 */
+  --tagsview-height: 34px;
+  --tagsview-text-color: var(--el-text-color-regular);
+  --tagsview-tag-active-text-color: #ffffff;
+  --tagsview-tag-bg-color: var(--el-bg-color);
+  --tagsview-tag-active-bg-color: var(--el-color-primary);
+  --tagsview-tag-border-radius: 2px;
+  --tagsview-tag-border-color: var(--el-border-color-lighter);
+  --tagsview-tag-active-border-color: var(--el-color-primary);
+  --tagsview-tag-icon-hover-bg-color: #00000030;
+  --tagsview-tag-icon-hover-color: #ffffff;
+  --tagsview-contextmenu-text-color: var(--el-text-color-regular);
+  --tagsview-contextmenu-hover-text-color: var(--el-text-color-primary);
+  --tagsview-contextmenu-bg-color: var(--el-bg-color-overlay);
+  --tagsview-contextmenu-hover-bg-color: var(--el-fill-color);
+  --tagsview-contextmenu-box-shadow: var(--el-box-shadow);
+  /** Hamburger 组件 */
+  --hamburger-text-color: var(--el-text-color-primary);
+  /** RightPanel 组件  */
+  --rightpanel-button-bg-color: #001428;
+}
+
+/** 内容区放大时，将不需要的组件隐藏 */
+body.content-large {
+  /** Header 区域 = TagsView 组件 */
+  --header-height: var(--tagsview-height);
+  /** NavigationBar 组件 */
+  --navigationbar-height: 0px;
+  /** Sidebar 组件 */
+  --sidebar-width: 0px;
+  --sidebar-hide-width: 0px;
+}
+
+/** 内容区全屏时，将不需要的组件隐藏 */
+body.content-full {
+  /** Header 区域 */
+  --header-height: 0px;
+  /** NavigationBar 组件 */
+  --navigationbar-height: 0px;
+  /** Sidebar 组件 */
+  --sidebar-width: 0px;
+  --sidebar-hide-width: 0px;
+  /** TagsView 组件 */
+  --tagsview-height: 0px;
+}
+
+
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--el-bg-color);
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}

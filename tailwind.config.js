@@ -6,6 +6,9 @@ export default {
     extend: {},
   },
   plugins: [],
+  corePlugins: {
+    preflight: true, // Ensure preflight is enabled
+  },
 }
 
 // modules.exports = {

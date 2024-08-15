@@ -1,26 +1,21 @@
 
-/**
- * staticRouter(静态路由)
- */
-export const commonRouter= [
-    {
-        path: "/",
-        redirect: "/login"
-    },
-    {
-        path: "/login",
-        name: "login",
-        component: () => import("@/views/login/index.vue"),
-        meta: {
-            title: "登录页"
-        }
-    },
+export const authRouter = [
     {
         path: "/home",
         name: "home",
         component: () => import("@/views/home/index.vue"),
         meta: {
             title: "首页"
+        }
+    }
+ ]
+export const commonRouter= [
+    {
+        path: "/login",
+        name: "login",
+        component: () => import("@/views/login/index.vue"),
+        meta: {
+            title: "登录页"
         }
     },
     // {
