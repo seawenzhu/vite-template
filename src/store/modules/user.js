@@ -3,13 +3,13 @@ import store from "@/store"
 import { defineStore } from "pinia"
 // import { useTagsViewStore } from "./tags-view"
 // import { useSettingsStore } from "./settings"
-import {getRefreshToken, getToken, removeRefreshToken, removeToken, setToken} from "@/utils/cookies"
+import CookieInfo from "@/utils/CookieInfo.js"
 // import { resetRouter } from "@/router"
 import ApiAuth from "@/api/auth.js"
 
 export const useUserStore = defineStore("user", () => {
-    const token = ref(getToken() || "")
-    const refreshToken = ref(getRefreshToken() || "")
+    const token = ref(CookieInfo.getToken() || "")
+    const refreshToken = ref(CookieInfo.getRefreshToken() || "")
     const roles = ref([])
     const permissions = ref([])
     const resources = ref([])
@@ -22,8 +22,8 @@ export const useUserStore = defineStore("user", () => {
     /** 登录 */
     const login = async ({ username, password, uuid, code }) => {
         const data = await ApiAuth.loginUsername(username, password, uuid, code )
-        setToken(data.token)
-        setRefreshToken(data.refreshToken)
+        CookieInfo.setToken(data.token)
+        CookieInfo.setRefreshToken(data.refreshToken)
         token.value = data.token
         refreshToken.value = data.refreshToken
     }
@@ -32,7 +32,7 @@ export const useUserStore = defineStore("user", () => {
         const data = await ApiAuth.getCurrentUserInfo()
         username.value = data.username
         // 验证返回的 roles 是否为一个非空数组，否则塞入一个没有任何作用的默认角色，防止路由守卫逻辑进入无限循环
-        roles.value = data.roles?.length > 0 ? data.roles : []
+        roles.value = data.smartRoleList?.length > 0 ? data.smartRoleList : []
         permissions.value = data.smartPermissionList?.length > 0 ? data.smartPermissionList : []
         resources.value = data.smartResourceList?.length > 0 ? data.smartResourceList : []
         routers.value = data.smartRouterList?.length > 0 ? data.smartRouterList : []
@@ -40,8 +40,8 @@ export const useUserStore = defineStore("user", () => {
 
     /** 登出 */
     const logout = () => {
-        removeToken()
-        removeRefreshToken()
+        CookieInfo.removeToken()
+        CookieInfo.removeRefreshToken()
         token.value = ""
         refreshToken.value = ""
         roles.value = []
@@ -50,11 +50,19 @@ export const useUserStore = defineStore("user", () => {
     }
     /** 重置 Token */
     const resetToken = () => {
-        removeToken()
-        removeRefreshToken()
+        CookieInfo.removeToken()
+        CookieInfo.removeRefreshToken()
         token.value = ""
         refreshToken.value = ""
         roles.value = []
+    }
+    const setToken = (token) => {
+        CookieInfo.setToken(token)
+        token.value = token
+    }
+    const setRefreshToken = (token) => {
+        CookieInfo.setRefreshToken(token)
+        refreshToken.value = token
     }
     /** 重置 Visited Views 和 Cached Views */
     // const _resetTagsView = () => {
@@ -64,7 +72,7 @@ export const useUserStore = defineStore("user", () => {
     //     }
     // }
 
-    return { token, roles, username, login, getUserInfo, logout, resetToken }
+    return { token, roles, username, login, getUserInfo, logout, resetToken, setToken, setRefreshToken }
 })
 
 /** 在 setup 外使用 */

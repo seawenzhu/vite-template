@@ -13,7 +13,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="layout-logo-container layout-mode-top flex items-center" :class="{ collapse: props.collapse }">
+  <div class="layout-logo-container layout-mode-top flex items-center" :class="{ 'collapse-logo': props.collapse }">
     <transition name="layout-logo-fade">
       <router-link v-if="props.collapse" key="collapse" to="/">
         <img :src="logo" class="layout-logo"  alt="logo"/>
@@ -48,7 +48,8 @@ const props = defineProps({
   line-height: var(--navigationbar-height);
 }
 
-.collapse {
+.collapse-logo {
+  justify-content: center;
   .layout-logo {
     width: 32px;
     height: 32px;

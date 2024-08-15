@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps } from "vue"
+import { computed } from "vue"
 import path from "path-browserify"
 import SvgIcon from "@/components/SvgIcon/index.vue"
 

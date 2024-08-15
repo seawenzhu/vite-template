@@ -1,9 +1,18 @@
 <script setup>
 import { computed } from "vue"
 
-const props = withDefaults(defineProps(), {
-  prefix: "icon"
-})
+const props = defineProps(
+    {
+      name: {
+        type: String,
+        required: true
+      },
+      prefix: {
+        type: String,
+        default: "icon"
+      }
+    }
+)
 
 const symbolId = computed(() => `#${props.prefix}-${props.name}`)
 </script>

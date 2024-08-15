@@ -33,24 +33,21 @@ const loginFormRules = {
 }
 /** 登录逻辑 */
 const handleLogin = () => {
-  loginFormRef.value?.validate((valid, fields) => {
-    if (valid) {
-      loading.value = true
-      useUserStore()
-          .login(loginFormData)
-          .then(() => {
-            router.push({ path: "/home" })
-          })
-          .catch(() => {
-            createCode()
-            loginFormData.password = ""
-          })
-          .finally(() => {
-            loading.value = false
-          })
-    } else {
-      console.error("表单校验不通过", fields)
-    }
+  loading.value = true
+  loginFormRef.value?.validate().then(() => {
+    useUserStore().login(loginFormData).then(() => {
+          router.push({ path: "/home" })
+        }).catch((err) => {
+          console.error("登录失败", err)
+          createCode()
+          loginFormData.password = ""
+        }).finally(() => {
+          loading.value = false
+        })
+  }).catch((err) => {
+    console.error("表单校验不通过", err)
+  }).finally(() => {
+    loading.value = false
   })
 }
 /** 创建验证码 */

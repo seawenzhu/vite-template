@@ -2,8 +2,9 @@ import axios from 'axios'
 import {ElMessage} from 'element-plus'
 import store from '@/store'
 import router from "@/router";
-import CacheKey from "@/utils/keys.js";
-import Cookies from "js-cookie";
+import CookieInfo from "@/utils/CookieInfo.js";
+import {useUserStoreHook} from "@/store/modules/user.js";
+import {MessageBox} from "@element-plus/icons-vue";
 // 请求列表(防重复提交)
 let requestList = [];
 let cancelToken = axios.CancelToken;
@@ -14,7 +15,6 @@ let refreshSubscribers = []
 //这个是标识 现在是否正在刷新
 let isRefreshing = false
 
-const token = Cookies.get(CacheKey.TOKEN)
 console.log(import.meta.env)
 // create an axios instance
 const api = axios.create({
@@ -38,6 +38,7 @@ api.interceptors.request.use(
                 requestList.push(requestFlag);
             }
         });
+        const token = CookieInfo.getToken()
         if (token && !config.headers['refreshToken']) {
             // let each request carry token
             config.headers['Authorization'] = 'Bearer ' + token
@@ -64,6 +65,8 @@ api.interceptors.response.use(
      * You can also judge the status by HTTP Status Code
      */
     response => {
+
+        const userStore = useUserStoreHook()
         //请求返回后，将请求标记从requestList中移除
         let requestFlag = JSON.stringify(response.config.url) + JSON.stringify(response.config.data) + '&' + response.config.method;
         requestList.splice(requestList.findIndex(item => item === requestFlag), 1);
@@ -94,16 +97,16 @@ api.interceptors.response.use(
                 // 403
                 if (res.code === 403 || res.code === 'UPM-300') {
                     // to re-login
-                    // MessageBox.confirm('您可以选择切换身份，重新登录，或者点击取消留在该页面', '抱歉，您没有权限执行该操作', {
-                    //     confirmButtonText: '重新登录',
-                    //     cancelButtonText: '取消',
-                    //     type: 'warning'
-                    // }).then(() => {
-                    //     store.dispatch('user/resetToken').then(() => {
-                    //         router.push({name: 'Login'})
-                    //     })
-                    // })
-                    ElMessage.warning(res.msg|| "Error")
+                    MessageBox.confirm('您可以选择切换身份，重新登录，或者点击取消留在该页面', '抱歉，您没有权限执行该操作', {
+                        confirmButtonText: '重新登录',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        userStore.resetToken().then(() => {
+                            router.push({name: 'Login'})
+                        })
+                    })
+                    // ElMessage.warning(res.msg|| "Error")
                     router.push({name: 'Login'})
                 }
                 return Promise.reject(res.msg || 'Error')
@@ -124,6 +127,8 @@ api.interceptors.response.use(
 )
 const refreshToken = (response) => {
     console.log('refresh token')
+
+    const userStore = useUserStoreHook()
     const config = response.config
     if (!isRefreshing) {
         return api.post('/api/token/refresh',
@@ -134,9 +139,9 @@ const refreshToken = (response) => {
                     'refreshToken': true
                 },
             }).then(data => {
-            store.commit('user/SET_TOKEN', data.token)
-            store.commit('user/SET_REFRESHTOKEN', data.refreshToken)
-            refreshSubscribers.forEach(cb => cb(token))
+            userStore.setToken(data.token)
+            userStore.setRefreshToken(data.refreshToken)
+            refreshSubscribers.forEach(cb => cb(data.token))
             refreshSubscribers = []
             return api(config)
         })
