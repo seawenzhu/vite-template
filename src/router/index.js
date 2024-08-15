@@ -3,6 +3,7 @@ import NProgress from "@/plugins/nprogress";
 import {errorRouter, commonRouter, authRouter} from "./modules/common-router";
 import {ElMessage, ElNotification} from "element-plus";
 import { useUserStoreHook } from "@/store/modules/user"
+import upmRouter from "@/router/modules/upm-router.js";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -14,6 +15,7 @@ const router = createRouter({
             redirect: "/home",
             children: [
                 ...authRouter,
+                ...upmRouter,
             ]
         },
         ...commonRouter,

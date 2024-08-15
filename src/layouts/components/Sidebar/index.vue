@@ -7,6 +7,7 @@ import {storeToRefs} from "pinia"
 import {useAppStore} from "@/store/modules/app"
 import {getCssVariableValue} from "@/utils"
 import {useRoute} from "vue-router";
+import sidebarMenus from "./sidebar-menus.js";
 
 const route = useRoute()
 const appStore = useAppStore()
@@ -42,16 +43,7 @@ const hiddenScrollbarVerticalBar = computed(() => {
   return "block"
 })
 
-const menusRoutes = ref([])
-menusRoutes.value.push({
-  path: "/",
-  name: "home",
-  meta: {
-    title: "首页",
-    svgIcon: "dashboard", //elIcon
-    affix: true
-  }
-})
+const menusRoutes = ref([...sidebarMenus])
 </script>
 
 <template>

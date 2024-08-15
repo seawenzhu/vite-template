@@ -20,7 +20,7 @@
   --sidebar-width: 220px;
   --sidebar-hide-width: 58px;
   --sidebar-border-right: 1px solid var(--el-fill-color);
-  --sidebar-menu-item-height: 60px;
+  --sidebar-menu-item-height: 40px;
   --sidebar-menu-tip-line-bg-color: var(--el-color-primary);
   --sidebar-menu-bg-color: #001428;
   --sidebar-menu-hover-bg-color: #409eff10;
